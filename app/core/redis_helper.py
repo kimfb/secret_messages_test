@@ -9,10 +9,11 @@ class RedisHelper:
     def __init__(self):
         self.pool: ConnectionPool | None = None
 
+
     async def connect(self):
         self.pool = redis.ConnectionPool(
             host=settings.redis.host,
-            post=settings.redis.port,
+            port=settings.redis.port,
             db=settings.redis.db,
             password=settings.redis.password,
             decode_responses=settings.redis.decode_responses,
@@ -28,12 +29,17 @@ class RedisHelper:
     def get_client(self):
         if not self.pool:
             raise RuntimeError('Redis pool не инициализирован. Вызовите connect()')
-
+        return Redis(connection_pool=self.pool)
 
 redis_helper = RedisHelper()
 
 
 async def get_redis_client() -> AsyncGenerator[Redis, None]:
     """Зависимость FastAPI."""
+    # await redis_helper.connect()
     client = redis_helper.get_client()
     yield client
+
+
+
+

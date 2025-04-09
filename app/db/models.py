@@ -1,11 +1,8 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import DateTime, Boolean, String, func
+from app.db.base import BaseDBModel
 
-class Base(DeclarativeBase):
-    pass
-
-
-class SecretsLog(Base):
+class SecretsLog(BaseDBModel):
     __tablename__ = 'secrets_log'
 
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
