@@ -19,7 +19,4 @@ async def create_secret(
     val = await redis_client.get('secret')
     print(val)
 
-    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
-    response.headers['Expires'] = '0'
-    response.headers['Pragma'] = 'no-cache'
 
