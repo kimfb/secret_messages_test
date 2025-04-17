@@ -11,6 +11,7 @@ class SecretCreate(BaseModel):
 
 class SecretResponse(BaseModel):
     id: uuid4
+    passphrase: str | None = None
 
 class SecretRead(BaseModel):
     secret: str

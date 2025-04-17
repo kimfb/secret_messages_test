@@ -15,7 +15,7 @@ class RedisHelper:
             host=settings.redis.host,
             port=settings.redis.port,
             db=settings.redis.db,
-            password=settings.redis.password,
+            #password=settings.redis.password,
             decode_responses=settings.redis.decode_responses,
             max_connections=settings.redis.max_connections,
             socket_timeout=settings.redis.socket_timeout,
