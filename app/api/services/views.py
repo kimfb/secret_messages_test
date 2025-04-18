@@ -9,7 +9,7 @@ from redis.asyncio import Redis
 from app.core.db_helper import db_helper
 from app.core.redis_helper import get_redis_client, redis_helper
 from app.api.services.secret_service import encrypt_secret, decrypt_secret
-
+from app.api.services.crud_service import create_secret_db
 router_app = APIRouter(tags=['Secrets'], prefix='/secret')
 
 @router_app.post('/create')
@@ -25,7 +25,12 @@ async def create_secret(
     enc = encrypt_secret(secret_in.secret)
     await redis_client.setex(token, secret_in.ttl_seconds, json.dumps(enc))
     print(request.client.host)
-    return {'token': token}
+    return await create_secret_db(
+        session=session_db,
+        secret_enc=enc,
+        token=token
+        )
+    # return {'token': token}
 
 
 @router_app.get("/{secret_key}")
