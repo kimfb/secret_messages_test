@@ -28,6 +28,7 @@ async def create_secret(
     return await create_secret_db(
         session=session_db,
         secret_enc=enc,
+        request=request,
         token=token
         )
     # return {'token': token}

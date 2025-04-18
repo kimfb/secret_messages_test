@@ -1,4 +1,6 @@
 from datetime import datetime
+from http.client import responses
+
 from sqlalchemy import select, exists
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Request
@@ -11,7 +13,7 @@ async def create_secret_db(
         # secret: SecretCreate,
         secret_enc: dict,
         token: str,
-        # request: Request
+        request: Request
 ):
 
     secret_cur = select(Secrets).where(
@@ -27,7 +29,13 @@ async def create_secret_db(
         token=token,
         secret=secret_enc['encrypted']
     )
+
+    log_new = SecretsLog(
+        ip=request.client.host,
+        secret=secret_new
+    )
     session.add(secret_new)
+    session.add(log_new)
     await session.commit()
     return secret_new
 
