@@ -21,8 +21,7 @@ async def create_secret(
         session_db: AsyncSession = Depends(db_helper.session_getter),
         redis_client: Redis = Depends(get_redis_client)
 ):
-    # await redis_client.set('secret',secret_in.secret)
-    # val = await redis_client.get('secret')
+
     token = str(uuid4())
     enc_secret = encrypt_secret(secret_in.secret)
     hashed_phrase = hash_phrase(secret_in.passphrase)

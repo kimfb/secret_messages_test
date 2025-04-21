@@ -10,7 +10,7 @@ class SecretCreate(BaseModel):
     ttl_seconds: int = 300
 
 
-class SecretResponse(BaseModel):
+class SecretDelete(BaseModel):
     id: uuid4
     passphrase: str | None = None
 

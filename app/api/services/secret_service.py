@@ -1,14 +1,9 @@
 import uuid
 import base64
 import bcrypt
-import secrets
-import os
-import json
+
 
 from cryptography.fernet import Fernet
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.backends import default_backend
 
 
 def encrypt_secret(secret: str):
@@ -33,12 +28,3 @@ def hash_phrase(phrase: str) -> str:
 def verify_phrase(phrase: str, hashed: str) -> bool:
     return bcrypt.checkpw(phrase.encode(), hashed.encode())
 
-
-# k = generate_key(os.urandom(16))
-# s = encrypt_secret('мой секрет')
-# print(s['encrypted'])
-# print(s['key'])
-# res = decrypt_secret(s['encrypted'], s['key'])
-# # print(k)
-# print(s)
-# print(res)
