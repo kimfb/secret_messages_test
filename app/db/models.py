@@ -22,8 +22,7 @@ class Secrets(BaseDBModel):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     token: Mapped[UUID]
-    secret: Mapped[str]
-    # phrase: Mapped[str]
+    phrase: Mapped[str]
 
     log: Mapped['SecretsLog'] = relationship(
         back_populates='secret',

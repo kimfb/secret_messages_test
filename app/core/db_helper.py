@@ -40,6 +40,7 @@ class DatabaseHelper:
         async with self.session_factory() as session:
             yield session
 
+
 db_helper = DatabaseHelper(
     url=str(settings.db.url),
     echo=settings.db.echo,
@@ -47,3 +48,4 @@ db_helper = DatabaseHelper(
     pool_size=settings.db.pool_size,
     max_overflow=settings.db.max_overflow
 )
+

@@ -1,5 +1,6 @@
 import uuid
 import base64
+import bcrypt
 import secrets
 import os
 import json
@@ -24,6 +25,13 @@ def decrypt_secret(encrypted: str, key_b64: str):
     key = base64.b64decode(key_b64)
     fernet = Fernet(key)
     return fernet.decrypt(encrypted.encode()).decode()
+
+
+def hash_phrase(phrase: str) -> str:
+    return bcrypt.hashpw(phrase.encode(), bcrypt.gensalt()).decode()
+
+def verify_phrase(phrase: str, hashed: str) -> bool:
+    return bcrypt.checkpw(phrase.encode(), hashed.encode())
 
 
 # k = generate_key(os.urandom(16))
