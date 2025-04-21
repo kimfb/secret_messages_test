@@ -2,7 +2,7 @@ from uuid import uuid4
 import json
 
 from fastapi import APIRouter, status, Depends, Request, Response
-from app.api.shemas.secrets import SecretCreate, SecretRead, SecretResponse
+from app.api.shemas.secrets import SecretCreate, SecretRead
 from sqlalchemy.ext.asyncio import AsyncSession
 from redis.asyncio import Redis
 

@@ -16,7 +16,7 @@ class SecretsLog(BaseDBModel):
 
     secret: Mapped['Secrets'] = relationship(back_populates='log')
 
-
+verified
 class Secrets(BaseDBModel):
     __tablename__ = 'secrets'
 
