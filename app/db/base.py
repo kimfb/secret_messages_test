@@ -2,7 +2,6 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, declared_attr
 
 
 class BaseDBModel(DeclarativeBase):
-    """Абстрактная модель для определения таблицы БД."""
     __abstract__ = True
 
     @declared_attr.directive
@@ -10,5 +9,5 @@ class BaseDBModel(DeclarativeBase):
         return cls.__name__.lower()
 
     id: Mapped[int] = mapped_column(primary_key=True,
-                                    unique=True,
                                     autoincrement=True)
+

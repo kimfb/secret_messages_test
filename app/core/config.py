@@ -18,6 +18,10 @@ class PostgresConfig(BaseModel):
     max_overflow: int = 10
 
     @property
+    def sync_url(self) -> str:
+        return f"postgresql+psycopg2://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}"
+
+    @property
     def url(self) -> str:
         return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}"
 

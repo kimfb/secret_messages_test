@@ -49,7 +49,7 @@ async def get_secret(
     await redis_client.delete(secret_key)
     req = json.loads(req)
 
-    await get_secret_db(session=session_db, token=secret_key, request=request)
+    await get_secret_db(session=session_db, token=secret_key)
     return decrypt_secret(req['encrypted'], req['key'])
 
 
@@ -65,11 +65,11 @@ async def delete_secret(
     hashed_passphrase = await get_passphrase(token=secret_key, session=session_db)
     verified = verify_phrase(passphrase, hashed_passphrase)
     if not verified:
-        return {'error': 'incorrect passphrase'}
+        return {'error': 'неверная passphrase'}
     await redis_client.delete(secret_key)
-    await delete_secret_db(token=secret_key, session=session_db)
+    await delete_secret_db(token=secret_key, session=session_db, request=request)
 
-    return {'message': 'данные удалены'}
+    return {'status': 'данные удалены'}
 
 
 

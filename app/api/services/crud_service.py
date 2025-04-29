@@ -9,7 +9,6 @@ from app.db.models import SecretsLog, Secrets
 
 async def create_secret_db(
         session: AsyncSession,
-        # secret: SecretCreate,
         hashed_phrase: str,
         token: str,
         request: Request
@@ -21,19 +20,20 @@ async def create_secret_db(
     )
 
     log_new = SecretsLog(
-        ip=request.client.host,
+        ip_creator=request.client.host,
         secret=secret_new
     )
     session.add(secret_new)
-    #session.add(log_new)
     await session.commit()
-    return 'Данные сохранены'
+    return {
+        'status': 'Данные сохранены',
+        'token': token}
+
 
 
 async def get_secret_db(
         session: AsyncSession,
-        token: str,
-        request: Request
+        token: str
 ):
     stmt = (
      select(Secrets)
@@ -47,19 +47,23 @@ async def get_secret_db(
 
     res = await session.execute(stmt)
     secret = res.scalar_one_or_none()
-    if secret:
-        secret_log = secret.log
-        secret_log.first_read = datetime.now()
 
-        await session.commit()
-        return {'message': 'ok'}
+    if not secret:
+        return {"error": 'нет данных'}
 
-    return {"error": 'нет данных'}
+    secret_log = secret.log
+    secret_log.first_read = datetime.now()
+
+    await session.commit()
+    return {'status': 'Данные прочитаны'}
+
+
 
 
 async def delete_secret_db(
         token: str,
         session: AsyncSession,
+        request: Request
 ):
     stmt = (
         select(SecretsLog)
@@ -75,17 +79,18 @@ async def delete_secret_db(
     if secret_log:
         secret_log.deleted_at = datetime.now()
         secret_log.deleted = True
+        secret_log.ip_deleted_by = request.client.host
         await session.commit()
 
-        return {'message': 'ok'}
+        return {'status': 'данные удалены'}
 
     return {'error': 'нет данных'}
 
 
 
 async def get_passphrase(
-        session: AsyncSession,
-        token: str
+        token: str,
+        session: AsyncSession
 ):
     stmt = select(Secrets).where(
         Secrets.token == token
