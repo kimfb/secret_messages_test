@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: secrets_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app  # Для разработки с hot-reload
+    env_file:
+      - "app/.env"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - APP_DB_USER=${APP_DB_USER}
+      - APP_DB_NAME=${APP_DB_NAME}
+      - APP_DB_HOST=${APP_DB_HOST}
+      - APP_DB_PORT=${APP_DB_PORT}
+      - APP_DB_PASSWORD=${APP_DB_PASSWORD}
+      - APP_REDIS_HOST=${APP_REDIS_HOST}
+      - APP_REDIS_PORT=${APP_REDIS_PORT}
+      - APP_REDIS_DB=${APP_REDIS_DB}
+    depends_on:
+      - db
+      - redis
+
+
+  db:
+    image: postgres:13
+    container_name: secrets_app_db
+    environment:
+      POSTGRES_DB: ${APP_DB_USER}
+      POSTGRES_USER: ${APP_DB_NAME}
+      POSTGRES_PASSWORD: ${APP_DB_PASSWORD}
+    ports:
+      - "5432:5432"
+
+  redis:
+      image: redis:alpine
+      container_name: secrets_app_redis
+      ports:
+        - "6379:6379"
+
+volumes:
+  postgres_data:
