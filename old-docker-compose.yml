@@ -1,10 +1,17 @@
+version: '3.9'
+
 services:
   app:
     build:
-      dockerfile: ./Dockerfile
       context: ./
+      dockerfile: ./Dockerfile
+    container_name: secrets_app
     ports:
       - "8000:8000"
+    volumes:
+      - .:/app  # Для разработки с hot-reload
+    env_file:
+      - ".env"
     environment:
       - PYTHONUNBUFFERED=1
       - APP_DB_USER=${APP_DB_USER}
@@ -19,31 +26,22 @@ services:
       - db
       - redis
 
+
   db:
-    image: postgres:17.4
-    #volumes:
-    #  - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    image: postgres:16.4
+    container_name: secrets_app_db
     environment:
       POSTGRES_DB: ${APP_DB_NAME}
       POSTGRES_USER: ${APP_DB_USER}
-#      POSTGRES_NAME: ${APP_DB_NAME}
       POSTGRES_PASSWORD: ${APP_DB_PASSWORD}
     ports:
-      - "5433:5432"
-
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.org
-      PGADMIN_DEFAULT_PASSWORD: pgadmin
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    ports:
-      - "5050:80"
+      - "5432:5432"
 
   redis:
-    image: redis:alpine
-    container_name: secrets_app_redis
-    ports:
-      - "6379:6379"
+      image: redis:alpine
+      container_name: secrets_app_redis
+      ports:
+        - "6379:6379"
 
-
+volumes:
+  postgres_data:

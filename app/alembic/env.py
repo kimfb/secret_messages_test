@@ -3,6 +3,8 @@ import os
 from importlib.metadata import metadata
 from pathlib import Path
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
 from app.core.config import settings
 from app.db.base import BaseDBModel
 from app.db.models import Secrets, SecretsLog
@@ -15,7 +17,6 @@ from sqlalchemy import pool
 from alembic import context
 
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

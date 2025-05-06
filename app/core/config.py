@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, PostgresDsn, RedisDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 class PostgresConfig(BaseModel):
@@ -30,7 +30,7 @@ class RedisConfig(BaseModel):
     host: str
     port: int
     db: int
-    password: str
+    password: str | None = None
     decode_responses: bool = True
     max_connections: int = 100
     socket_timeout: float | None = None
@@ -54,7 +54,7 @@ class Settings(BaseSettings):
     redis_host: str
     redis_port: int
     redis_db: int
-    redis_password: str
+    redis_password: str | None = None
 
     # db: PostgresConfig
     # redis: RedisConfig
